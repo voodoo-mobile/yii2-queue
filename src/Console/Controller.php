@@ -145,13 +145,19 @@ class Controller extends \yii\console\Controller
         $process->setIdleTimeout(null);
         $process->run();
         if ($process->isSuccessful()) {
-            //TODO logging.
-            $this->stdout($process->getOutput() . PHP_EOL);
-            $this->stdout($process->getErrorOutput() . PHP_EOL);
+            if ($output = $process->getOutput()) {
+                $this->stdout($output . PHP_EOL);
+            }
+            if ($output = $process->getErrorOutput()) {
+                $this->stdout($output . PHP_EOL);
+            }
         } else {
-            //TODO logging.
-            $this->stdout($process->getOutput() . PHP_EOL);
-            $this->stdout($process->getErrorOutput() . PHP_EOL);
+            if ($output = $process->getOutput()) {
+                $this->stdout($output . PHP_EOL);
+            }
+            if ($output = $process->getErrorOutput()) {
+                $this->stdout($output . PHP_EOL);
+            }
         }
     }
 
