@@ -111,18 +111,15 @@ class Controller extends \yii\console\Controller
      */
     public function actionListen($cwd = null, $timeout = null, $env = [])
     {
-        $this->stdout("Listening to queue...\n");
         $this->initSignalHandler();
         $command = PHP_BINARY . " {$this->getScriptPath()} {$this->_name}/run";
         declare(ticks = 1);
         while (true) {
-            $this->stdout("Running new process...\n");
             $this->runQueueFetching($command, $cwd, $timeout, $env);
             if ($this->sleepTimeout > 0) {
                 sleep($this->sleepTimeout);
             }
         }
-        $this->stdout("Exiting...\n");
     }
 
     /**
@@ -193,8 +190,6 @@ class Controller extends \yii\console\Controller
         if ($job !== false) {
             $this->stdout("Running job #: {$job->id}" . PHP_EOL);
             $this->queue->run($job);
-        } else {
-            $this->stdout("No job\n");
         }
     }
 
