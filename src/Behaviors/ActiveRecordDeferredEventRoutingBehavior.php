@@ -6,7 +6,7 @@
  * @since 2015.02.25
  */
 
-namespace UrbanIndo\Yii2\Queue\Behaviors;
+namespace vm\queue\Behaviors;
 
 use yii\db\ActiveRecord;
 
@@ -58,7 +58,7 @@ class ActiveRecordDeferredEventRoutingBehavior extends DeferredEventRoutingBehav
         unset($handler[0]);
         $handler['scenario'] = $this->owner->getScenario();
         $data = $handler;
-        $this->queue->post(new \UrbanIndo\Yii2\Queue\Job([
+        $this->queue->post(new \vm\queue\Job([
             'route' => $route,
             'data' => $data
         ]));

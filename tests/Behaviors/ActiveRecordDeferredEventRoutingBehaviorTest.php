@@ -13,7 +13,7 @@ class ActiveRecordDeferredEventRoutingBehaviorTest extends PHPUnit_Framework_Tes
     public function testEventRouting() {
         
         $queue = Yii::$app->queue;
-        /* @var $queue \UrbanIndo\Yii2\Queue\Queues\MemoryQueue */
+        /* @var $queue \vm\queue\Queues\MemoryQueue */
         $this->assertEquals(0, $queue->getSize());
         $model = new DeferredEventRoutingBehaviorTestActiveRecord();
         $model->id = 5;
@@ -55,7 +55,7 @@ class DeferredEventRoutingBehaviorTestActiveRecord extends \yii\db\ActiveRecord 
     public function behaviors() {
         return [
             [
-                'class' => 'UrbanIndo\Yii2\Queue\Behaviors\ActiveRecordDeferredEventRoutingBehavior',
+                'class' => 'vm\queue\Behaviors\ActiveRecordDeferredEventRoutingBehavior',
                 'events' => [
                     self::EVENT_TEST => ['test/index'],
                     self::EVENT_TEST2 => function($model) {

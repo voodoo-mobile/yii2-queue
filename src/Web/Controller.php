@@ -5,11 +5,11 @@
  * @author Petra Barus <petra.barus@gmail.com>
  */
 
-namespace UrbanIndo\Yii2\Queue\Web;
+namespace vm\queue\Web;
 
-use UrbanIndo\Yii2\Queue\Job;
-use UrbanIndo\Yii2\Queue\Queue;
-use UrbanIndo\Yii2\Queue\Queues\MultipleQueue;
+use vm\queue\Job;
+use vm\queue\Queue;
+use vm\queue\Queues\MultipleQueue;
 
 /**
  * QueueController is a web controller to post job via url.
@@ -17,7 +17,7 @@ use UrbanIndo\Yii2\Queue\Queues\MultipleQueue;
  * To use this use a controller map.
  *
  *    'controllerMap' => [
- *         'queue' => 'UrbanIndo\Yii2\Queue\Web\Controller',
+ *         'queue' => 'vm\queue\Web\Controller',
  *    ]
  *
  * And then send a POST to the endpoint
@@ -38,7 +38,7 @@ class Controller extends \yii\web\Controller
     
     /**
      * The queue to process.
-     * @var string|array|\UrbanIndo\Yii2\Queue\Queue
+     * @var string|array|\vm\queue\Queue
      */
     public $queue = 'queue';
     
@@ -83,7 +83,7 @@ class Controller extends \yii\web\Controller
     public function actionPost()
     {
         $job = $this->createJobFromRequest();
-        /* @var $queue \UrbanIndo\Yii2\Queue\Queue */
+        /* @var $queue \vm\queue\Queue */
         if ($this->queue->post($job)) {
             return ['status' => 'okay', 'jobId' => $job->id];
         } else {
@@ -94,7 +94,7 @@ class Controller extends \yii\web\Controller
     /**
      * Endpoint to post a job to multiple queue.
      * @return mixed
-     * @throws \InvalidArgumentException Queue has to be instance of \UrbanIndo\Yii2\Queue\MultipleQueue.
+     * @throws \InvalidArgumentException Queue has to be instance of \vm\queue\MultipleQueue.
      * @throws \yii\web\ServerErrorHttpException When failed to post the job.
      */
     public function actionPostToQueue()
@@ -106,7 +106,7 @@ class Controller extends \yii\web\Controller
         }
         $queue = $this->queue;
         if (!$queue instanceof MultipleQueue) {
-            throw new \InvalidArgumentException('Queue is not instance of \UrbanIndo\Yii2\Queue\MultipleQueue');
+            throw new \InvalidArgumentException('Queue is not instance of \vm\queue\MultipleQueue');
         }
         /* @var $queue MultipleQueue */
         

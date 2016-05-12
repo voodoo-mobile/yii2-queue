@@ -6,7 +6,7 @@
  * @since 2015.02.24
  */
 
-namespace UrbanIndo\Yii2\Queue;
+namespace vm\queue;
 
 use Exception;
 

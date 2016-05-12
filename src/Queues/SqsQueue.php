@@ -6,10 +6,10 @@
  * @since 2015.02.24
  */
 
-namespace UrbanIndo\Yii2\Queue\Queues;
+namespace vm\queue\Queues;
 
 use \Aws\Sqs\SqsClient;
-use UrbanIndo\Yii2\Queue\Job;
+use vm\queue\Job;
 
 /**
  * SqsQueue provides queue for AWS SQS.
@@ -17,7 +17,7 @@ use UrbanIndo\Yii2\Queue\Job;
  * @author Petra Barus <petra.barus@gmail.com>
  * @since 2015.02.24
  */
-class SqsQueue extends \UrbanIndo\Yii2\Queue\Queue
+class SqsQueue extends \vm\queue\Queue
 {
 
     /**
@@ -79,7 +79,7 @@ class SqsQueue extends \UrbanIndo\Yii2\Queue\Queue
      * Create job from SQS message.
      *
      * @param array $message The message.
-     * @return \UrbanIndo\Yii2\Queue\Job
+     * @return \vm\queue\Job
      */
     private function createJobFromMessage($message)
     {

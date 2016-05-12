@@ -6,7 +6,7 @@
  * @since 2015.02.25
  */
 
-namespace UrbanIndo\Yii2\Queue\Behaviors;
+namespace vm\queue\Behaviors;
 
 /**
  * DeferredEventInterface provides method interface for handling the deferred

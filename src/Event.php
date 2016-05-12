@@ -5,7 +5,7 @@
  * @since 2016.01.16
  */
 
-namespace UrbanIndo\Yii2\Queue;
+namespace vm\queue;
 
 /**
  * @author Petra Barus <petra.barus@gmail.com>

@@ -13,7 +13,7 @@ class DeferredEventBehaviorTest extends PHPUnit_Framework_TestCase  {
     
     public function testEventHandler() {
         $queue = Yii::$app->queue;
-        /* @var $queue \UrbanIndo\Yii2\Queue\Queues\MemoryQueue */
+        /* @var $queue \vm\queue\Queues\MemoryQueue */
         $this->assertEquals(0, $queue->getSize());
         
         $model = new TestModel();
@@ -41,7 +41,7 @@ class TestModel extends \yii\base\Model {
     public function behaviors() {
         return [
             [
-                'class' => \UrbanIndo\Yii2\Queue\Behaviors\DeferredEventBehavior::class,
+                'class' => \vm\queue\Behaviors\DeferredEventBehavior::class,
                 'events' => [
                     self::EVENT_TEST => 'deferEvent',
                 ]

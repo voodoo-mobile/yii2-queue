@@ -4,7 +4,7 @@
  * @author Petra Barus <petra.barus@gmail.com>
  */
 
-namespace UrbanIndo\Yii2\Queue\Behaviors;
+namespace vm\queue\Behaviors;
 
 use yii\db\ActiveRecord;
 
@@ -17,7 +17,7 @@ use yii\db\ActiveRecord;
  * then will operate on the object that refetched from the database from primary
  * key or object whose attribute repopulated in case of EVENT_AFTER_DELETE.
  *
- * @property-read ActiveRecord $owner the owner.
+ * @property ActiveRecord $owner the owner.
  *
  * @author Petra Barus <petra.barus@gmail.com>
  */
@@ -42,7 +42,7 @@ abstract class ActiveRecordDeferredEventHandler extends DeferredEventHandler
         $handler->owner = null;
         /* @var $queue Queue */
         if ($eventName == ActiveRecord::EVENT_AFTER_DELETE) {
-            $queue->post(new \UrbanIndo\Yii2\Queue\Job([
+            $queue->post(new \vm\queue\Job([
                 'route' => function () use ($class, $pk, $attributes, $handler, $eventName, $scenario) {
                     $object = \Yii::createObject($class);
                     /* @var $object ActiveRecord */
@@ -53,7 +53,7 @@ abstract class ActiveRecordDeferredEventHandler extends DeferredEventHandler
             ]));
 
         } else {
-            $queue->post(new \UrbanIndo\Yii2\Queue\Job([
+            $queue->post(new \vm\queue\Job([
                 'route' => function () use ($class, $pk, $attributes, $handler, $eventName, $scenario) {
                     $object = $class::findOne($pk);
                     if ($object === null) {

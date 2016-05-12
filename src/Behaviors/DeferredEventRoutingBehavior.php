@@ -5,10 +5,10 @@
  * @since 2015.02.25
  */
 
-namespace UrbanIndo\Yii2\Queue\Behaviors;
+namespace vm\queue\Behaviors;
 
 use yii\db\ActiveRecord;
-use UrbanIndo\Yii2\Queue\Queue;
+use vm\queue\Queue;
 
 /**
  * DeferredEventRoutingBehavior provides matching between controller in
@@ -88,7 +88,7 @@ class DeferredEventRoutingBehavior extends \yii\base\Behavior
         $route = $handler[0];
         unset($handler[0]);
         $data = $handler;
-        $this->queue->post(new \UrbanIndo\Yii2\Queue\Job([
+        $this->queue->post(new \vm\queue\Job([
             'route' => $route,
             'data' => $data
         ]));

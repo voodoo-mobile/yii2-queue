@@ -6,10 +6,10 @@
  * @since 2015.02.25
  */
 
-namespace UrbanIndo\Yii2\Queue\Strategies;
+namespace vm\queue\Strategies;
 
-use UrbanIndo\Yii2\Queue\Queues\MultipleQueue;
-use UrbanIndo\Yii2\Queue\Job;
+use vm\queue\Queues\MultipleQueue;
+use vm\queue\Job;
 
 /**
  * Strategy is abstract class fo all strategy that is used for MultipleQueue.
@@ -22,7 +22,7 @@ abstract class Strategy extends \yii\base\Object
 
     /**
      * Stores the queue.
-     * @var \UrbanIndo\Yii2\Queue\MultipleQueue
+     * @var \vm\queue\MultipleQueue
      */
     protected $_queue;
 

@@ -6,9 +6,9 @@
  * @since 2016.01.16
  */
 
-namespace UrbanIndo\Yii2\Queue\Queues;
+namespace vm\queue\Queues;
 
-use UrbanIndo\Yii2\Queue\Job;
+use vm\queue\Job;
 
 /**
  * DbQueue provides Yii2 database storing for Queue.
@@ -31,7 +31,7 @@ use UrbanIndo\Yii2\Queue\Job;
  * @author Petra Barus <petra.barus@gmail.com>
  * @since 2016.01.16
  */
-class DbQueue extends \UrbanIndo\Yii2\Queue\Queue
+class DbQueue extends \vm\queue\Queue
 {
     /**
      * Status when the job is ready.

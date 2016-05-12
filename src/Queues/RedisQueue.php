@@ -6,10 +6,10 @@
  * @since 2016.01.16
  */
 
-namespace UrbanIndo\Yii2\Queue\Queues;
+namespace vm\queue\Queues;
 
 use yii\redis\Connection;
-use UrbanIndo\Yii2\Queue\Job;
+use vm\queue\Job;
 
 /**
  * RedisQueue provides Redis storing for Queue.
@@ -21,7 +21,7 @@ use UrbanIndo\Yii2\Queue\Job;
  * @author Petra Barus <petra.barus@gmail.com>
  * @since 2016.01.16
  */
-class RedisQueue extends \UrbanIndo\Yii2\Queue\Queue
+class RedisQueue extends \vm\queue\Queue
 {
     /**
      * Stores the redis connection.

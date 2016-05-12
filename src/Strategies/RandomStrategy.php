@@ -6,9 +6,9 @@
  * @since 2015.02.25
  */
 
-namespace UrbanIndo\Yii2\Queue\Strategies;
+namespace vm\queue\Strategies;
 
-use UrbanIndo\Yii2\Queue\Job;
+use vm\queue\Job;
 
 /**
  * RandomStrategy provides random choosing of the queue for getting the job.

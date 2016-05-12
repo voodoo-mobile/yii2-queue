@@ -6,7 +6,7 @@
  * @since 2015.02.24
  */
 
-namespace UrbanIndo\Yii2\Queue;
+namespace vm\queue;
 
 /**
  * Job is model for a job message.
@@ -37,7 +37,7 @@ class Job extends \yii\base\Object
      * Stores the header.
      * This can be different for each queue provider.
      *
-     * @var header
+     * @var array
      */
     public $header = [];
 

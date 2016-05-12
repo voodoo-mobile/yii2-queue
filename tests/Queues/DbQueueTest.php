@@ -1,6 +1,6 @@
 <?php
 
-use UrbanIndo\Yii2\Queue\Queues\DbQueue;
+use vm\queue\Queues\DbQueue;
 
 class DbQueueTest extends TestCase
 {
@@ -22,7 +22,7 @@ class DbQueueTest extends TestCase
                     'password' => 'test',
                 ],
                 'queue' => [
-                    'class' => '\UrbanIndo\Yii2\Queue\Queues\DbQueue',
+                    'class' => '\vm\queue\Queues\DbQueue',
                     'tableName' => $tableName,
                 ]
             ]
@@ -75,7 +75,7 @@ class DbQueueTest extends TestCase
         
         $this->assertEquals(0, $this->countTable());
         
-        $queue->post(new UrbanIndo\Yii2\Queue\Job(['route' => function () {
+        $queue->post(new vm\queue\Job(['route' => function () {
             DbQueueTest::$counter += 1;
         }]));
         
@@ -83,7 +83,7 @@ class DbQueueTest extends TestCase
         
         $this->assertEquals(1, $this->countTable(['status' => DbQueue::STATUS_READY]));
         
-        $queue->post(new UrbanIndo\Yii2\Queue\Job(['route' => function () {
+        $queue->post(new vm\queue\Job(['route' => function () {
             DbQueueTest::$counter += 1;
         }]));
         
@@ -106,7 +106,7 @@ class DbQueueTest extends TestCase
         
         $this->assertEquals(0, $this->countTable(['status' => DbQueue::STATUS_ACTIVE]));
         
-        $queue->post(new UrbanIndo\Yii2\Queue\Job(['route' => function () {
+        $queue->post(new vm\queue\Job(['route' => function () {
             $this->counter += 1;
         }]));
         
@@ -114,7 +114,7 @@ class DbQueueTest extends TestCase
         
         $this->assertEquals(1, $this->countTable(['status' => DbQueue::STATUS_ACTIVE]));
         
-        $this->assertTrue($job instanceof UrbanIndo\Yii2\Queue\Job);
+        $this->assertTrue($job instanceof vm\queue\Job);
     }
     
     public function testRun()
@@ -131,7 +131,7 @@ class DbQueueTest extends TestCase
         
         $this->assertEquals(0, $this->countTable(['status' => DbQueue::STATUS_ACTIVE]));
         
-        $queue->post(new UrbanIndo\Yii2\Queue\Job(['route' => function () {
+        $queue->post(new vm\queue\Job(['route' => function () {
             DbQueueTest::$counter += 1;
         }]));
         
@@ -139,13 +139,13 @@ class DbQueueTest extends TestCase
         
         $this->assertEquals(1, $this->countTable(['status' => DbQueue::STATUS_ACTIVE]));
         
-        $this->assertTrue($job instanceof UrbanIndo\Yii2\Queue\Job);
+        $this->assertTrue($job instanceof vm\queue\Job);
         
         $queue->run($job);
         
         $this->assertEquals(1, DbQueueTest::$counter);
         
-        $queue->post(new UrbanIndo\Yii2\Queue\Job(['route' => function () {
+        $queue->post(new vm\queue\Job(['route' => function () {
             DbQueueTest::$counter += 2;
         }]));
         
@@ -164,11 +164,11 @@ class DbQueueTest extends TestCase
         
         $this->assertEquals(0, $this->countTable());
         
-        $queue->post(new UrbanIndo\Yii2\Queue\Job(['route' => function () {
+        $queue->post(new vm\queue\Job(['route' => function () {
             DbQueueTest::$counter += 1;
         }]));
         
-        $queue->post(new UrbanIndo\Yii2\Queue\Job(['route' => function () {
+        $queue->post(new vm\queue\Job(['route' => function () {
             DbQueueTest::$counter += 1;
         }]));
         
@@ -193,11 +193,11 @@ class DbQueueTest extends TestCase
         
         $this->assertEquals(0, $this->countTable());
         
-        $queue->post(new UrbanIndo\Yii2\Queue\Job(['route' => function () {
+        $queue->post(new vm\queue\Job(['route' => function () {
             DbQueueTest::$counter += 1;
         }]));
         
-        $queue->post(new UrbanIndo\Yii2\Queue\Job(['route' => function () {
+        $queue->post(new vm\queue\Job(['route' => function () {
             DbQueueTest::$counter += 1;
         }]));
         
@@ -233,12 +233,12 @@ class DbQueueTest extends TestCase
         
         $this->assertEquals(0, $this->countTable(['status' => DbQueue::STATUS_ACTIVE]));
         
-        $queue->post(new UrbanIndo\Yii2\Queue\Job(['route' => function () {
+        $queue->post(new vm\queue\Job(['route' => function () {
             DbQueueTest::$counter += 1;
         }]));
         
         $job = $queue->fetch();
-        $this->assertTrue($job instanceof UrbanIndo\Yii2\Queue\Job);
+        $this->assertTrue($job instanceof vm\queue\Job);
         
         $this->assertEquals(1, $this->countTable(['status' => DbQueue::STATUS_ACTIVE]));
         

@@ -6,7 +6,7 @@
  * @since 2015.02.25
  */
 
-namespace UrbanIndo\Yii2\Queue\Strategies;
+namespace vm\queue\Strategies;
 
 /**
  * WeightedStrategy that will put weight to the queues.

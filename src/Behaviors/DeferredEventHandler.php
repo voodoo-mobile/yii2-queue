@@ -5,10 +5,10 @@
  * @author Petra Barus <petra.barus@gmail.com>
  */
 
-namespace UrbanIndo\Yii2\Queue\Behaviors;
+namespace vm\queue\Behaviors;
 
 use Yii;
-use UrbanIndo\Yii2\Queue\Queue;
+use vm\queue\Queue;
 
 /**
  * DeferredEventHandler handles the event inside the behavior instance, instead
@@ -21,7 +21,7 @@ abstract class DeferredEventHandler extends \yii\base\Behavior
     
     /**
      * The queue that post the deferred event.
-     * @var \UrbanIndo\Yii2\Queue\Queue
+     * @var \vm\queue\Queue
      */
     public $queue = 'queue';
     
@@ -63,7 +63,7 @@ abstract class DeferredEventHandler extends \yii\base\Behavior
         $handler->queue = null;
         $handler->owner = null;
         /* @var $queue Queue */
-        $queue->post(new \UrbanIndo\Yii2\Queue\Job([
+        $queue->post(new \vm\queue\Job([
             'route' => function () use ($owner, $handler) {
                 return $handler->handleEvent($owner);
             }

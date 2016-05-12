@@ -2,11 +2,6 @@
 
 This provides queue component for Yii2.
 
-[![Latest Stable Version](https://poser.pugx.org/urbanindo/yii2-queue/v/stable.svg)](https://packagist.org/packages/urbanindo/yii2-queue)
-[![Total Downloads](https://poser.pugx.org/urbanindo/yii2-queue/downloads.svg)](https://packagist.org/packages/urbanindo/yii2-queue)
-[![Latest Unstable Version](https://poser.pugx.org/urbanindo/yii2-queue/v/unstable.svg)](https://packagist.org/packages/urbanindo/yii2-queue)
-[![Build Status](https://travis-ci.org/urbanindo/yii2-queue.svg)](https://travis-ci.org/urbanindo/yii2-queue)
-
 ## Installation
 
 The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
@@ -14,13 +9,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-php composer.phar require --prefer-dist urbanindo/yii2-queue "*"
+php composer.phar require --prefer-dist vm/yii2-queue "^1.4.0"
 ```
 
 or add
 
 ```
-"urbanindo/yii2-queue": "*"
+"vm/yii2-queue": "^1.4.0"
 ```
 
 to the require section of your `composer.json` file.
@@ -37,7 +32,7 @@ return [
     // ...
     'controllerMap' => [
         'queue' => [
-            'class' => 'UrbanIndo\Yii2\Queue\Console\Controller',
+            'class' => 'vm\queue\Console\Controller',
             //'sleepTimeout' => 1
         ],
         
@@ -61,7 +56,7 @@ the task in the component. For example, queue using AWS SQS
 ```php
 'components' => [
     'queue' => [
-        'class' => 'UrbanIndo\Yii2\Queue\Queues\SqsQueue',
+        'class' => 'vm\queue\Queues\SqsQueue',
         'module' => 'task',
         'url' => 'https://sqs.ap-southeast-1.amazonaws.com/123456789012/queue',
 		'config' => [
@@ -82,7 +77,7 @@ Or using Database queue
         //the db component
     ],
     'queue' => [
-        'class' => 'UrbanIndo\Yii2\Queue\Queues\DbQueue',
+        'class' => 'vm\queue\Queues\DbQueue',
         'db' => 'db',
         'tableName' => 'queue',
         'module' => 'task',
@@ -95,12 +90,12 @@ Or using Database queue
 ### Creating A Worker
 
 Creating a worker is just the same with creating console or web controller.
-In the task module create a controller that extends `UrbanIndo\Yii2\Queue\Worker\Controller`
+In the task module create a controller that extends `vm\queue\Worker\Controller`
 
 e.g.
 
 ```php
-class FooController extends UrbanIndo\Yii2\Queue\Worker\Controller {
+class FooController extends vm\queue\Worker\Controller {
 
     public function actionBar($param1, $param2){
         echo $param1;
@@ -115,7 +110,7 @@ chance.
 e.g.
 
 ```php
-class FooController extends UrbanIndo\Yii2\Queue\Worker\Controller {
+class FooController extends vm\queue\Worker\Controller {
 
     public function actionBar($param1, $param2){
         try {
@@ -133,7 +128,7 @@ To run the listener, run the console that set in the above config. If the
 controller mapped as `queue` then run.
 
 ```
-yii queue/listen
+./yii queue/listen
 ```
 
 ### Posting A Job
@@ -141,7 +136,7 @@ yii queue/listen
 To post a job from source code, put something like this.
 
 ```php
-use UrbanIndo\Yii2\Queue\Job;
+use vm\queue\Job;
 
 $route = 'foo/bar';
 $data = ['param1' => 'foo', 'param2' => 'bar'];
@@ -174,7 +169,7 @@ To use this, add behavior in a component and implement the defined event handler
     public function behaviors() {
         return array_merge([
             [
-                'class' => \UrbanIndo\Yii2\Queue\Behaviors\DeferredEventBehavior::class,
+                'class' => \vm\queue\Behaviors\DeferredEventBehavior::class,
                 'events' => [
                     self::EVENT_AFTER_VALIDATE => 'deferAfterValidate',
                 ]
@@ -195,7 +190,7 @@ behavior and the event attached in the original object.
 
 As for `ActiveRecord` class, since the object can not be passed due to limitation
 of SuperClosure in serializing PDO (I personally think that's bad too), the
-behavior should use `\UrbanIndo\Yii2\Queue\Behaviors\ActiveRecordDeferredEventBehavior`
+behavior should use `\vm\queue\Behaviors\ActiveRecordDeferredEventBehavior`
 instead. The difference is in the object in which the deferred event handler
 invoked.
 
@@ -206,7 +201,7 @@ object whose attributes are assigned from the attributes of the original object.
 
 ### Web End Point
 
-We can use web endpoint to use the queue by adding `\UrbanIndo\Yii2\Queue\Web\Controller`
+We can use web endpoint to use the queue by adding `\vm\queue\Web\Controller`
 to the controller map.
 
 For example
@@ -214,8 +209,8 @@ For example
 ```php
     'controllerMap' => [
         'queue' => [
-            /* @var $queue UrbanIndo\Yii2\Queue\Web\Controller */
-            'class' => 'UrbanIndo\Yii2\Queue\Web\Controller'
+            /* @var $queue vm\queue\Web\Controller */
+            'class' => 'vm\queue\Web\Controller'
         ]
     ],
 ```
@@ -233,8 +228,8 @@ For example to filter by IP address, we can use something like this.
 ```php
     'controllerMap' => [
         'queue' => [
-            /* @var $queue UrbanIndo\Yii2\Queue\Web\Controller */
-            'class' => 'UrbanIndo\Yii2\Queue\Web\Controller',
+            /* @var $queue vm\queue\Web\Controller */
+            'class' => 'vm\queue\Web\Controller',
             'as access' => [
                 'class' => '\yii\filters\AccessControl',
                 'rules' => [
@@ -260,4 +255,4 @@ To run the tests, in the root directory execute below.
 
 ## Road Map
 
-- Add more queue provider such as MemCache, IronMQ, RabbitMQ.
+- Add more queue provider such as MemCache, IronMQ.

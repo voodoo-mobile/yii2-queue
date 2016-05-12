@@ -6,9 +6,9 @@
  * @since 2015.02.25
  */
 
-namespace UrbanIndo\Yii2\Queue\Behaviors;
+namespace vm\queue\Behaviors;
 
-use UrbanIndo\Yii2\Queue\Queue;
+use vm\queue\Queue;
 
 /**
  * DeferredEventBehavior post a deferred code on event call.
@@ -143,7 +143,7 @@ class DeferredEventBehavior extends \yii\base\Behavior
         } else {
             $serializer = null;
         }
-        $this->queue->post(new \UrbanIndo\Yii2\Queue\Job([
+        $this->queue->post(new \vm\queue\Job([
             'route' => function () use ($object, $eventName, $handlers, $serializer) {
                 if ($handlers) {
                     $handler = $handlers[$eventName];
