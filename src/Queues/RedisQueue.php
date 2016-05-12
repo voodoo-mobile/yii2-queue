@@ -1,9 +1,8 @@
 <?php
 /**
  * DbQueue class file.
- *
  * @author Petra Barus <petra.barus@gmail.com>
- * @since 2016.01.16
+ * @since  2016.01.16
  */
 
 namespace vm\queue\Queues;
@@ -13,13 +12,11 @@ use vm\queue\Job;
 
 /**
  * RedisQueue provides Redis storing for Queue.
- *
  * This uses `yiisoft/yii2-redis` extension that doesn't shipped in the default
  * composer dependency. To use this you have to manually add `yiisoft/yii2-redis`
  * in the `composer.json`.
- *
  * @author Petra Barus <petra.barus@gmail.com>
- * @since 2016.01.16
+ * @since  2016.01.16
  */
 class RedisQueue extends \vm\queue\Queue
 {
@@ -28,13 +25,13 @@ class RedisQueue extends \vm\queue\Queue
      * @var string|array|Connection
      */
     public $db = 'redis';
-    
+
     /**
      * The name of the key to store the queue.
      * @var string
      */
     public $key = 'queue';
-    
+
     /**
      * @return void
      */
@@ -48,6 +45,7 @@ class RedisQueue extends \vm\queue\Queue
      * Delete the job.
      *
      * @param Job $job The job to delete.
+     *
      * @return boolean whether the operation succeed.
      */
     public function deleteJob(Job $job)
@@ -65,10 +63,11 @@ class RedisQueue extends \vm\queue\Queue
         if ($json == false) {
             return false;
         }
-        $data = \yii\helpers\Json::decode($json);
-        $job = $this->deserialize($data['data']);
-        $job->id = $data['id'];
+        $data                      = \yii\helpers\Json::decode($json);
+        $job                       = $this->deserialize($data['data']);
+        $job->id                   = $data['id'];
         $job->header['serialized'] = $data['data'];
+
         return $job;
     }
 
@@ -76,12 +75,13 @@ class RedisQueue extends \vm\queue\Queue
      * Post new job to the queue.  This contains implementation for database.
      *
      * @param Job $job The job to post.
+     *
      * @return boolean whether operation succeed.
      */
     protected function postJob(Job $job)
     {
         return $this->db->rpush($this->key, \yii\helpers\Json::encode([
-            'id' => uniqid('queue_', true),
+            'id'   => uniqid('queue_', true),
             'data' => $this->serialize($job),
         ]));
     }
@@ -90,16 +90,17 @@ class RedisQueue extends \vm\queue\Queue
      * Put back job to the queue.
      *
      * @param Job $job The job to restore.
+     *
      * @return boolean whether the operation succeed.
      */
     protected function releaseJob(Job $job)
     {
         return $this->db->rpush($this->key, \yii\helpers\Json::encode([
-            'id' => $job->id,
+            'id'   => $job->id,
             'data' => $job->header['serialized'],
         ]));
     }
-    
+
     /**
      * Returns the total number of all queue size.
      * @return integer
@@ -108,7 +109,7 @@ class RedisQueue extends \vm\queue\Queue
     {
         return $this->db->llen($this->key);
     }
-    
+
     /**
      * Purge the whole queue.
      * @return boolean

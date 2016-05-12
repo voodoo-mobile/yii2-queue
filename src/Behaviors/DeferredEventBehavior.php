@@ -1,9 +1,8 @@
 <?php
 /**
  * DeferredEventBehavior class file.
- *
  * @author Petra Barus <petra.barus@gmail.com>
- * @since 2015.02.25
+ * @since  2015.02.25
  */
 
 namespace vm\queue\Behaviors;
@@ -12,17 +11,13 @@ use vm\queue\Queue;
 
 /**
  * DeferredEventBehavior post a deferred code on event call.
- *
  * To use this, attach the behavior on the model, and implements the
  * DeferredEventInterface.
- *
  * NOTE: Due to some limitation on the superclosure, the model shouldn't have
  * unserializable class instances such as PDO etc.
- *
  * @property-read DeferredEventInterface $owner the owner of this behavior.
- *
  * @author Petra Barus <petra.barus@gmail.com>
- * @since 2015.02.25
+ * @since  2015.02.25
  */
 class DeferredEventBehavior extends \yii\base\Behavior
 {
@@ -35,38 +30,27 @@ class DeferredEventBehavior extends \yii\base\Behavior
 
     /**
      * List events that handled by the behavior.
-     *
      * This has two formats. The first one is "index",
-     *
      *     [self::EVENT_AFTER_SAVE, EVENT_AFTER_VALIDATE]]
-     *
      * and the second one is "key=>value". e.g.
-     *
      *     [
      *         self::EVENT_AFTER_SAVE => 'deferAfterSave',
      *         self::EVENT_AFTER_VALIDATE => 'deferAfterValidate'
      *     ]
-     *
      * For the first one, the object should implement DeferredEventInterface.
      * As for the second one, the handler will use the respective method of the
      * event.
-     *
      * e.g.
-     *
      *     [
      *         self::EVENT_AFTER_SAVE => 'deferAfterSave',
      *         self::EVENT_AFTER_VALIDATE => 'deferAfterValidate'
      *     ]
-     *
      * the model should implement
-     *
      *     public function deferAfterSave(){
      *     }
-     *
      * Note that the method doesn't receive $event just like any event handler.
      * This is because the $event object can be too large for the queue.
      * Also note that object that run the method is a clone.
-     *
      * @var array
      */
     public $events = [];
@@ -107,7 +91,7 @@ class DeferredEventBehavior extends \yii\base\Behavior
     public function init()
     {
         parent::init();
-        $this->queue = \yii\di\Instance::ensure($this->queue, Queue::className());
+        $this->queue             = \yii\di\Instance::ensure($this->queue, Queue::className());
         $this->_hasEventHandlers = !\yii\helpers\ArrayHelper::isIndexed(
             $this->events,
             true
@@ -126,7 +110,9 @@ class DeferredEventBehavior extends \yii\base\Behavior
 
     /**
      * Call the behavior owner to handle the deferred event.
+     *
      * @param \yii\base\Event $event The event to process.
+     *
      * @return void
      * @throws \Exception When the sender is not DeferredEventInterface.
      */
@@ -136,7 +122,7 @@ class DeferredEventBehavior extends \yii\base\Behavior
         if (!$this->_hasEventHandlers && !$object instanceof DeferredEventInterface) {
             throw new \Exception('Model is not instance of DeferredEventInterface');
         }
-        $handlers = ($this->_hasEventHandlers) ? $this->events : false;
+        $handlers  = ($this->_hasEventHandlers) ? $this->events : false;
         $eventName = $event->name;
         if (isset($this->_serializer)) {
             $serializer = $this->_serializer;
@@ -165,7 +151,7 @@ class DeferredEventBehavior extends \yii\base\Behavior
                         "Model doesn't have handlers for the event or is not instance of DeferredEventInterface"
                     );
                 }
-            }
+            },
         ]));
     }
 }

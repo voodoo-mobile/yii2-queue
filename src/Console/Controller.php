@@ -1,9 +1,8 @@
 <?php
 /**
  * QueueController class file.
- *
  * @author Petra Barus <petra.barus@gmail.com>
- * @since 2015.02.24
+ * @since  2015.02.24
  */
 
 namespace vm\queue\Console;
@@ -14,18 +13,14 @@ use yii\base\InvalidParamException;
 
 /**
  * QueueController handles console command for running the queue.
- *
  * To use the controller, update the controllerMap.
- *
  * return [
  *    // ...
  *     'controllerMap' => [
  *         'queue' => 'vm\queue\Console\QueueController'
  *     ],
  * ];
- * 
  * OR
- * 
  * return [
  *    // ...
  *     'controllerMap' => [
@@ -35,13 +30,10 @@ use yii\base\InvalidParamException;
  *          ]
  *     ],
  * ];
- *
  * To run
- *
  * yii queue
- *
  * @author Petra Barus <petra.barus@gmail.com>
- * @since 2015.02.24
+ * @since  2015.02.24
  */
 class Controller extends \yii\console\Controller
 {
@@ -50,7 +42,7 @@ class Controller extends \yii\console\Controller
      * @var string|array|Queue the name of the queue component. default to 'queue'.
      */
     public $queue = 'queue';
-    
+
     /**
      * @var integer sleep timeout for infinite loop in second
      */
@@ -60,14 +52,14 @@ class Controller extends \yii\console\Controller
      * @var string the name of the command.
      */
     private $_name = 'queue';
-    
+
     /**
      * @return void
      */
     public function init()
     {
         parent::init();
-        
+
         if (!is_numeric($this->sleepTimeout)) {
             throw new InvalidParamException('($sleepTimeout) must be an number');
         }
@@ -75,19 +67,21 @@ class Controller extends \yii\console\Controller
         if ($this->sleepTimeout < 0) {
             throw new InvalidParamException('($sleepTimeout) must be greater or equal than 0');
         }
-        
+
         $this->queue = \yii\di\Instance::ensure($this->queue, Queue::className());
     }
 
     /**
      * @inheritdoc
+     *
      * @param string $actionID The action id of the current request.
+     *
      * @return array the names of the options valid for the action
      */
     public function options($actionID)
     {
         return array_merge(parent::options($actionID), [
-            'queue'
+            'queue',
         ]);
     }
 
@@ -106,7 +100,8 @@ class Controller extends \yii\console\Controller
      * @param string  $cwd     The working directory.
      * @param integer $timeout Timeout.
      * @param array   $env     The environment to passed to the sub process.
-     * The format for each element is 'KEY=VAL'.
+     *                         The format for each element is 'KEY=VAL'.
+     *
      * @return void
      */
     public function actionListen($cwd = null, $timeout = null, $env = [])
@@ -124,10 +119,12 @@ class Controller extends \yii\console\Controller
 
     /**
      * Run the queue fetching process.
+     *
      * @param string  $command The command.
      * @param string  $cwd     The working directory.
      * @param integer $timeout The timeout.
      * @param array   $env     The environment to be passed.
+     *
      * @return void
      */
     protected function runQueueFetching(
@@ -135,7 +132,8 @@ class Controller extends \yii\console\Controller
         $cwd = null,
         $timeout = null,
         array $env = []
-    ) {
+    )
+    {
         $process = new \Symfony\Component\Process\Process(
             $command,
             isset($cwd) ? $cwd : getcwd(),
@@ -195,8 +193,10 @@ class Controller extends \yii\console\Controller
 
     /**
      * Post a job to the queue.
+     *
      * @param string $route The route.
      * @param string $data  The data in JSON format.
+     *
      * @return void
      */
     public function actionPost($route, $data = '{}')
@@ -208,11 +208,11 @@ class Controller extends \yii\console\Controller
 
     /**
      * Run a task without going to queue.
-     *
      * This is useful to test the task controller.
      *
      * @param string $route The route.
      * @param string $data  The data in JSON format.
+     *
      * @return void
      */
     public function actionRunTask($route, $data = '{}')
@@ -229,7 +229,7 @@ class Controller extends \yii\console\Controller
     {
         $this->queue->post(new Job([
             'route' => 'test/test',
-            'data' => ['halohalo' => 10, 'test2' => 100],
+            'data'  => ['halohalo' => 10, 'test2' => 100],
         ]));
     }
 
@@ -238,13 +238,14 @@ class Controller extends \yii\console\Controller
      *
      * @param string $route The route.
      * @param string $data  The JSON data.
+     *
      * @return Job
      */
     protected function createJob($route, $data = '{}')
     {
         return new Job([
             'route' => $route,
-            'data' => \yii\helpers\Json::decode($data),
+            'data'  => \yii\helpers\Json::decode($data),
         ]);
     }
 
@@ -252,6 +253,7 @@ class Controller extends \yii\console\Controller
      * Peek messages from queue that are still active.
      *
      * @param integer $count Number of messages to peek.
+     *
      * @return void
      */
     public function actionPeek($count = 1)
@@ -270,6 +272,7 @@ class Controller extends \yii\console\Controller
      * Purging messages from queue that are still active.
      *
      * @param integer $count Number of messages to delete.
+     *
      * @return void
      */
     public function actionPurge($count = 1)
@@ -287,7 +290,9 @@ class Controller extends \yii\console\Controller
 
     /**
      * Sets the name of the command. This should be overriden in the config.
+     *
      * @param string $value The value.
+     *
      * @return void
      */
     public function setName($value)

@@ -1,9 +1,8 @@
 <?php
 /**
  * MultipleQueue class file.
- *
  * @author Petra Barus <petra.barus@gmail.com>
- * @since 2015.02.25
+ * @since  2015.02.25
  */
 
 namespace vm\queue\Queues;
@@ -15,9 +14,8 @@ use vm\queue\Strategies\RandomStrategy;
 
 /**
  * MultipleQueue is a queue abstraction that handles multiple queue at once.
- *
  * @author Petra Barus <petra.barus@gmail.com>
- * @since 2015.02.25
+ * @since  2015.02.25
  */
 class MultipleQueue extends Queue
 {
@@ -64,6 +62,7 @@ class MultipleQueue extends Queue
 
     /**
      * @param integer $index The index of the queue.
+     *
      * @return Queue|null the queue or null if not exists.
      */
     public function getQueue($index)
@@ -73,7 +72,9 @@ class MultipleQueue extends Queue
 
     /**
      * Delete the job.
+     *
      * @param Job $job The job.
+     *
      * @return boolean Whether the operation succeed.
      */
     protected function deleteJob(Job $job)
@@ -92,7 +93,9 @@ class MultipleQueue extends Queue
 
     /**
      * Post new job to the queue.
+     *
      * @param Job $job The job.
+     *
      * @return boolean Whether operation succeed.
      */
     protected function postJob(Job $job)
@@ -102,8 +105,10 @@ class MultipleQueue extends Queue
 
     /**
      * Post new job to a specific queue.
+     *
      * @param Job     $job   The job.
      * @param integer $index The queue index.
+     *
      * @return boolean Whether operation succeed.
      */
     public function postToQueue(Job &$job, $index)
@@ -112,6 +117,7 @@ class MultipleQueue extends Queue
         if ($queue === null) {
             return false;
         }
+
         return $queue->post($job);
     }
 
@@ -119,15 +125,17 @@ class MultipleQueue extends Queue
      * Release the job.
      *
      * @param Job $job The job to release.
+     *
      * @return boolean whether the operation succeed.
      */
     protected function releaseJob(Job $job)
     {
         $index = $job->header[self::HEADER_MULTIPLE_QUEUE_INDEX];
         $queue = $this->getQueue($index);
+
         return $queue->release($job);
     }
-    
+
     /**
      * Returns the total number of all queue size.
      * @return integer
@@ -138,7 +146,7 @@ class MultipleQueue extends Queue
             return $queue->getSize();
         }, $this->queues));
     }
-    
+
     /**
      * Purge the whole queue.
      * @return boolean
@@ -148,6 +156,7 @@ class MultipleQueue extends Queue
         foreach ($this->queues as $queue) {
             $queue->purge();
         }
+
         return true;
     }
 }

@@ -1,9 +1,8 @@
 <?php
 /**
  * MemoryQueue class file.
- *
  * @author Petra Barus <petra.barus@gmail.com>
- * @since 2015.06.01
+ * @since  2015.06.01
  */
 
 namespace vm\queue\Queues;
@@ -12,15 +11,13 @@ use vm\queue\Job;
 
 /**
  * MemoryQueue stores queue in the local variable.
- *
  * This will only work for one request.
- *
  * @author Petra Barus <petra.barus@gmail.com>
- * @since 2015.06.01
+ * @since  2015.06.01
  */
 class MemoryQueue extends \vm\queue\Queue
 {
-    
+
     /**
      * @var Job[]
      */
@@ -28,6 +25,7 @@ class MemoryQueue extends \vm\queue\Queue
 
     /**
      * @param Job $job The job to delete.
+     *
      * @return boolean Whether the deletion succeed.
      */
     public function deleteJob(Job $job)
@@ -36,9 +34,11 @@ class MemoryQueue extends \vm\queue\Queue
             if ($val->id == $job->id) {
                 unset($this->_jobs[$key]);
                 $this->_jobs = array_values($this->_jobs);
+
                 return true;
             }
         }
+
         return true;
     }
 
@@ -51,20 +51,23 @@ class MemoryQueue extends \vm\queue\Queue
             return false;
         }
         $job = array_pop($this->_jobs);
+
         return $job;
     }
 
     /**
      * @param Job $job The job to be posted to the queueu.
+     *
      * @return boolean Whether the post succeed.
      */
     public function postJob(Job $job)
     {
-        $job->id = mt_rand(0, 65535);
+        $job->id       = mt_rand(0, 65535);
         $this->_jobs[] = $job;
+
         return true;
     }
-    
+
     /**
      * Returns the jobs posted to the queue.
      * @return Job[]
@@ -78,11 +81,13 @@ class MemoryQueue extends \vm\queue\Queue
      * Release the job.
      *
      * @param Job $job The job to release.
+     *
      * @return boolean whether the operation succeed.
      */
     protected function releaseJob(Job $job)
     {
         $this->_jobs[] = $job;
+
         return true;
     }
 
@@ -94,7 +99,7 @@ class MemoryQueue extends \vm\queue\Queue
     {
         return count($this->_jobs);
     }
-    
+
     /**
      * Purge the whole queue.
      * @return boolean
@@ -102,6 +107,7 @@ class MemoryQueue extends \vm\queue\Queue
     public function purge()
     {
         $this->_jobs = [];
+
         return true;
     }
 

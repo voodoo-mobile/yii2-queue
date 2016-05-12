@@ -1,9 +1,8 @@
 <?php
 /**
  * SqsQueue class file.
- *
  * @author Petra Barus <petra.barus@gmail.com>
- * @since 2015.02.24
+ * @since  2015.02.24
  */
 
 namespace vm\queue\Queues;
@@ -13,9 +12,8 @@ use vm\queue\Job;
 
 /**
  * SqsQueue provides queue for AWS SQS.
- *
  * @author Petra Barus <petra.barus@gmail.com>
- * @since 2015.02.24
+ * @since  2015.02.24
  */
 class SqsQueue extends \vm\queue\Queue
 {
@@ -28,7 +26,6 @@ class SqsQueue extends \vm\queue\Queue
 
     /**
      * The config for SqsClient.
-     *
      * This will be used for SqsClient::factory($config);
      * @var array
      */
@@ -64,8 +61,8 @@ class SqsQueue extends \vm\queue\Queue
     public function fetchJob()
     {
         $message = $this->_client->receiveMessage([
-            'QueueUrl' => $this->url,
-            'AttributeNames' => ['ApproximateReceiveCount'],
+            'QueueUrl'            => $this->url,
+            'AttributeNames'      => ['ApproximateReceiveCount'],
             'MaxNumberOfMessages' => 1,
         ]);
         if (isset($message['Messages']) && count($message['Messages']) > 0) {
@@ -79,13 +76,15 @@ class SqsQueue extends \vm\queue\Queue
      * Create job from SQS message.
      *
      * @param array $message The message.
+     *
      * @return \vm\queue\Job
      */
     private function createJobFromMessage($message)
     {
-        $job = $this->deserialize($message['Body']);
+        $job                          = $this->deserialize($message['Body']);
         $job->header['ReceiptHandle'] = $message['ReceiptHandle'];
-        $job->id = $message['MessageId'];
+        $job->id                      = $message['MessageId'];
+
         return $job;
     }
 
@@ -93,16 +92,18 @@ class SqsQueue extends \vm\queue\Queue
      * Post the job to queue.
      *
      * @param Job $job The job posted to the queue.
+     *
      * @return boolean whether operation succeed.
      */
     public function postJob(Job $job)
     {
         $model = $this->_client->sendMessage([
-            'QueueUrl' => $this->url,
+            'QueueUrl'    => $this->url,
             'MessageBody' => $this->serialize($job),
         ]);
         if ($model !== null) {
             $job->id = $model['MessageId'];
+
             return true;
         } else {
             return false;
@@ -113,16 +114,18 @@ class SqsQueue extends \vm\queue\Queue
      * Delete the job from the queue.
      *
      * @param Job $job The job to be deleted.
+     *
      * @return boolean whether the operation succeed.
      */
     public function deleteJob(Job $job)
     {
         if (!empty($job->header['ReceiptHandle'])) {
             $receiptHandle = $job->header['ReceiptHandle'];
-            $response = $this->_client->deleteMessage([
-                'QueueUrl' => $this->url,
+            $response      = $this->_client->deleteMessage([
+                'QueueUrl'      => $this->url,
                 'ReceiptHandle' => $receiptHandle,
             ]);
+
             return $response !== null;
         } else {
             return false;
@@ -133,17 +136,19 @@ class SqsQueue extends \vm\queue\Queue
      * Release the job.
      *
      * @param Job $job The job to release.
+     *
      * @return boolean whether the operation succeed.
      */
     public function releaseJob(Job $job)
     {
         if (!empty($job->header['ReceiptHandle'])) {
             $receiptHandle = $job->header['ReceiptHandle'];
-            $response = $this->_client->changeMessageVisibility([
-                'QueueUrl' => $this->url,
-                'ReceiptHandle' => $receiptHandle,
+            $response      = $this->_client->changeMessageVisibility([
+                'QueueUrl'          => $this->url,
+                'ReceiptHandle'     => $receiptHandle,
                 'VisibilityTimeout' => 0,
             ]);
+
             return $response !== null;
         } else {
             return false;
@@ -152,7 +157,6 @@ class SqsQueue extends \vm\queue\Queue
 
     /**
      * Returns the SQS client used.
-     *
      * @return \Aws\Sqs\SqsClient
      */
     public function getClient()
@@ -166,13 +170,14 @@ class SqsQueue extends \vm\queue\Queue
      */
     public function getSize()
     {
-        $response = $this->getClient()->getQueueAttributes([
-            'QueueUrl' => $this->url,
+        $response   = $this->getClient()->getQueueAttributes([
+            'QueueUrl'       => $this->url,
             'AttributeNames' => [
-                'ApproximateNumberOfMessages'
-            ]
+                'ApproximateNumberOfMessages',
+            ],
         ]);
         $attributes = $response->get('Attributes');
+
         return \yii\helpers\ArrayHelper::getValue($attributes, 'ApproximateNumberOfMessages', 0);
     }
 
@@ -185,6 +190,7 @@ class SqsQueue extends \vm\queue\Queue
         $response = $this->getClient()->getQueueAttributes([
             'QueueUrl' => $this->url,
         ]);
+
         return $response !== null;
     }
 

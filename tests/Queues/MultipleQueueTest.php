@@ -1,50 +1,52 @@
 <?php
 
-class MultipleQueueTest extends PHPUnit_Framework_TestCase {
-    
-    public function test() {
+class MultipleQueueTest extends PHPUnit_Framework_TestCase
+{
+
+    public function test()
+    {
         $queue = Yii::createObject([
-            'class' => '\vm\queue\Queues\MultipleQueue',
-            'queues' => [
+            'class'    => '\vm\queue\Queues\MultipleQueue',
+            'queues'   => [
                 [
-                    'class' => '\vm\queue\Queues\MemoryQueue'
+                    'class' => '\vm\queue\Queues\MemoryQueue',
                 ],
                 [
-                    'class' => '\vm\queue\Queues\MemoryQueue'
+                    'class' => '\vm\queue\Queues\MemoryQueue',
                 ],
                 [
-                    'class' => '\vm\queue\Queues\MemoryQueue'
+                    'class' => '\vm\queue\Queues\MemoryQueue',
                 ],
                 [
-                    'class' => '\vm\queue\Queues\MemoryQueue'
-                ]
+                    'class' => '\vm\queue\Queues\MemoryQueue',
+                ],
             ],
             'strategy' => [
                 'class' => 'vm\queue\Strategies\RandomStrategy',
-            ]
+            ],
         ]);
-        
+
         $this->assertTrue($queue instanceof vm\queue\Queues\MultipleQueue);
         /* @var $queue vm\queue\Queues\MultipleQueue */
         $this->assertCount(4, $queue->queues);
-        foreach($queue->queues as $tqueue) {
+        foreach ($queue->queues as $tqueue) {
             $this->assertTrue($tqueue instanceof \vm\queue\Queues\MemoryQueue);
         }
         $this->assertTrue($queue->strategy instanceof \vm\queue\Strategies\Strategy);
         $this->assertTrue($queue->strategy instanceof \vm\queue\Strategies\RandomStrategy);
-        
+
         $queue0 = $queue->getQueue(0);
         $this->assertTrue($queue0 instanceof \vm\queue\Queues\MemoryQueue);
         $queue4 = $queue->getQueue(4);
         $this->assertNull($queue4);
-        
+
         $njob = $queue->strategy->fetch();
         $this->assertFalse($njob);
         $i = 0;
         $queue->post(new \vm\queue\Job([
-            'route' => function() use (&$i) {
+            'route' => function () use (&$i) {
                 $i += 1;
-            }
+            },
         ]));
         do {
             //this some times will exist
@@ -56,13 +58,13 @@ class MultipleQueueTest extends PHPUnit_Framework_TestCase {
         $this->assertContains($index, range(0, 3));
         $fjob1->runCallable();
         $this->assertEquals(1, $i);
-        
+
         $queue->postToQueue(new \vm\queue\Job([
-            'route' => function() use (&$i) {
+            'route' => function () use (&$i) {
                 $i += 1;
-            }
+            },
         ]), 3);
-        
+
         do {
             //this some times will exist
             $fjob2 = $queue->fetch();

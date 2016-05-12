@@ -6,17 +6,17 @@ require dirname(__FILE__) . '/../vendor/yiisoft/yii2/Yii.php';
 require dirname(__FILE__) . '/TestCase.php';
 
 $config = [
-    'id' => 'Yii2 Queue Test',
-    'basePath' => dirname(__FILE__),
+    'id'         => 'Yii2 Queue Test',
+    'basePath'   => dirname(__FILE__),
     'components' => [
-        'db' => [
+        'db'    => [
             'class' => '\yii\db\Connection',
-            'dsn' => 'sqlite::memory:',
+            'dsn'   => 'sqlite::memory:',
         ],
         'queue' => [
-            'class' => '\vm\queue\Queues\MemoryQueue'
-        ]
-    ]
+            'class' => '\vm\queue\Queues\MemoryQueue',
+        ],
+    ],
 ];
 
 $application = new yii\console\Application($config);

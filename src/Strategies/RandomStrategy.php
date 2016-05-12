@@ -1,9 +1,8 @@
 <?php
 /**
  * RandomStrategy class file.
- *
  * @author Petra Barus <petra.barus@gmail.com>
- * @since 2015.02.25
+ * @since  2015.02.25
  */
 
 namespace vm\queue\Strategies;
@@ -12,9 +11,8 @@ use vm\queue\Job;
 
 /**
  * RandomStrategy provides random choosing of the queue for getting the job.
- *
  * @author Petra Barus <petra.barus@gmail.com>
- * @since 2015.02.25
+ * @since  2015.02.25
  */
 class RandomStrategy extends Strategy
 {
@@ -41,16 +39,17 @@ class RandomStrategy extends Strategy
     protected function getJobFromQueues()
     {
         $attempt = 0;
-        $count = count($this->_queue->queues);
+        $count   = count($this->_queue->queues);
         while ($attempt < $this->maxAttempt) {
             $index = rand(0, $count - 1);
             $queue = $this->_queue->getQueue($index);
-            $job = $queue->fetch();
+            $job   = $queue->fetch();
             if ($job !== false) {
                 return [$job, $index];
             }
             $attempt++;
         }
+
         return false;
     }
 }

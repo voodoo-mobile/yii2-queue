@@ -1,9 +1,8 @@
 <?php
 /**
  * Strategy class file.
- *
  * @author Petra Barus <petra.barus@gmail.com>
- * @since 2015.02.25
+ * @since  2015.02.25
  */
 
 namespace vm\queue\Strategies;
@@ -13,9 +12,8 @@ use vm\queue\Job;
 
 /**
  * Strategy is abstract class fo all strategy that is used for MultipleQueue.
- *
  * @author Petra Barus <petra.barus@gmail.com>
- * @since 2015.02.25
+ * @since  2015.02.25
  */
 abstract class Strategy extends \yii\base\Object
 {
@@ -28,7 +26,9 @@ abstract class Strategy extends \yii\base\Object
 
     /**
      * Sets the queue.
+     *
      * @param MultipleQueue $queue The queue.
+     *
      * @return void
      */
     public function setQueue(MultipleQueue $queue)
@@ -55,6 +55,7 @@ abstract class Strategy extends \yii\base\Object
         list($job, $index) = $return;
         /* @var $job Job */
         $job->header[MultipleQueue::HEADER_MULTIPLE_QUEUE_INDEX] = $index;
+
         return $job;
     }
 
@@ -62,6 +63,7 @@ abstract class Strategy extends \yii\base\Object
      * Delete the job from the queue.
      *
      * @param Job $job The job.
+     *
      * @return boolean whether the operation succeed.
      */
     public function delete(Job $job)
@@ -78,6 +80,7 @@ abstract class Strategy extends \yii\base\Object
         if (!isset($index)) {
             return false;
         }
+
         return $queue->delete($job);
     }
 }

@@ -1,7 +1,6 @@
 <?php
 /**
  * Controller class file.
- *
  * @author Petra Barus <petra.barus@gmail.com>
  */
 
@@ -13,17 +12,12 @@ use vm\queue\Queues\MultipleQueue;
 
 /**
  * QueueController is a web controller to post job via url.
- *
  * To use this use a controller map.
- *
  *    'controllerMap' => [
  *         'queue' => 'vm\queue\Web\Controller',
  *    ]
- *
  * And then send a POST to the endpoint
- *
  *   curl -XPOST http://example.com/queue --data route=test/test --data={"data": "data"}
- *
  * @author Petra Barus <petra.barus@gmail.com>
  * @author Adinata <mail.dieend@gmail.com>
  */
@@ -35,13 +29,13 @@ class Controller extends \yii\web\Controller
      * @var boolean
      */
     public $enableCsrfValidation = false;
-    
+
     /**
      * The queue to process.
      * @var string|array|\vm\queue\Queue
      */
     public $queue = 'queue';
-    
+
     /**
      * @return void
      */
@@ -49,9 +43,9 @@ class Controller extends \yii\web\Controller
     {
         parent::init();
         \Yii::$app->getResponse()->format = 'json';
-        $this->queue = \yii\di\Instance::ensure($this->queue, Queue::className());
+        $this->queue                      = \yii\di\Instance::ensure($this->queue, Queue::className());
     }
-    
+
     /**
      * @return Job
      * @throws \yii\web\ServerErrorHttpException When malformed request.
@@ -59,7 +53,7 @@ class Controller extends \yii\web\Controller
     private function createJobFromRequest()
     {
         $route = \Yii::$app->getRequest()->post('route');
-        $data = \Yii::$app->getRequest()->post('data', []);
+        $data  = \Yii::$app->getRequest()->post('data', []);
 
         if (empty($route)) {
             throw new \yii\web\ServerErrorHttpException('Failed to post job');
@@ -71,7 +65,7 @@ class Controller extends \yii\web\Controller
 
         return new Job([
             'route' => $route,
-            'data' => $data
+            'data'  => $data,
         ]);
     }
 
@@ -90,7 +84,7 @@ class Controller extends \yii\web\Controller
             throw new \yii\web\ServerErrorHttpException('Failed to post job');
         }
     }
-    
+
     /**
      * Endpoint to post a job to multiple queue.
      * @return mixed
@@ -99,7 +93,7 @@ class Controller extends \yii\web\Controller
      */
     public function actionPostToQueue()
     {
-        $job = $this->createJobFromRequest();
+        $job   = $this->createJobFromRequest();
         $index = \Yii::$app->getRequest()->post('index');
         if (!isset($index)) {
             throw new \InvalidArgumentException('Index needed');
@@ -109,7 +103,7 @@ class Controller extends \yii\web\Controller
             throw new \InvalidArgumentException('Queue is not instance of \vm\queue\MultipleQueue');
         }
         /* @var $queue MultipleQueue */
-        
+
         if ($queue->postToQueue($job, $index)) {
             return ['status' => 'okay', 'jobId' => $job->id];
         } else {
